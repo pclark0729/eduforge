@@ -5,6 +5,7 @@ import { ContentGenerator } from '@/lib/content/content-generator'
 import { createServerComponentClient } from '@/lib/supabase/server'
 import { generateMilestoneContent } from '@/lib/content/generate-milestone-content'
 import { setGenerationProgress, clearGenerationProgress } from '@/lib/utils/generation-progress'
+import { checkUsage, incrementUsage } from '@/lib/subscriptions/usage'
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,6 +19,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Topic and level are required' },
         { status: 400 }
+      )
+    }
+
+    // Check usage limits
+    const usage = await checkUsage(user.id)
+    if (!usage.canCreate) {
+      const periodText = usage.planName === 'Free' ? 'week' : 'month'
+      const usedText = usage.coursesAllowed === null 
+        ? `${usage.coursesCreated}`
+        : `${usage.coursesCreated}/${usage.coursesAllowed}`
+      
+      return NextResponse.json(
+        { 
+          error: `Usage limit reached. You've created ${usedText} courses this ${periodText}. Upgrade your plan to create more courses.`,
+          usage,
+          upgradeRequired: true
+        },
+        { status: 403 }
       )
     }
 
@@ -62,6 +81,9 @@ export async function POST(request: NextRequest) {
     if (saveError) {
       throw saveError
     }
+
+    // Increment usage counter
+    await incrementUsage(user.id)
 
     // Get user profile for learning style
     const { data: profile } = await supabase

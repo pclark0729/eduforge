@@ -47,6 +47,16 @@ You need at least **one** AI provider configured for content generation:
 - **OLLAMA_MODEL**: Defaults to `llama2`
 - Requires running Ollama locally: https://ollama.ai
 
+### Payment Processing (Optional - for paid subscriptions)
+
+**Stripe:**
+- **STRIPE_SECRET_KEY**: Get from https://dashboard.stripe.com/apikeys (Secret key)
+- **NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY**: Get from https://dashboard.stripe.com/apikeys (Publishable key)
+- **STRIPE_WEBHOOK_SECRET**: Get from Stripe Dashboard > Developers > Webhooks (after creating webhook endpoint)
+- **STRIPE_BASIC_PLAN_PRICE_ID**: Get from Stripe Dashboard > Products (after creating Basic plan product)
+- **STRIPE_UNLIMITED_PLAN_PRICE_ID**: Get from Stripe Dashboard > Products (after creating Unlimited plan product)
+- **NEXT_PUBLIC_APP_URL**: Your app URL (e.g., `https://forge.peyton-clark.com`) for redirect URLs
+
 ## Setup Instructions
 
 ### 1. Supabase Setup

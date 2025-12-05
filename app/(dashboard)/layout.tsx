@@ -53,6 +53,12 @@ export default async function DashboardLayout({
                 >
                   [settings]
                 </Link>
+                <Link
+                  href="/dashboard/pricing"
+                  className="px-3 py-2 text-sm terminal-link border-none hover:text-terminal-green"
+                >
+                  [pricing]
+                </Link>
               </div>
             </div>
             <div className="flex items-center space-x-4">
