@@ -45,7 +45,7 @@ export async function generateMilestoneContent(
         `Part of ${learningPathTitle} - ${milestoneLevel} level`
       )
 
-      const { data: savedLesson, error: lessonError } = await supabase
+      const { data: savedLesson, error: lessonError } = await (supabase
         .from('lessons')
         .insert({
           learning_path_id: learningPathId,
@@ -61,9 +61,9 @@ export async function generateMilestoneContent(
           step_by_step_examples: lesson.step_by_step_examples as Json,
           common_mistakes: lesson.common_mistakes,
           estimated_minutes: lesson.estimated_minutes,
-        } as Database['public']['Tables']['lessons']['Insert'])
+        } as any)
         .select()
-        .single()
+        .single())
 
       if (lessonError) {
         console.error(`Error saving lesson for ${concept}:`, lessonError)
@@ -165,7 +165,7 @@ export async function generateMilestoneContent(
         answer_key: quiz.answer_key,
         passing_score: quiz.passing_score,
         time_limit_minutes: quiz.time_limit_minutes,
-      })
+      } as any)
       .select()
       .single()
 
