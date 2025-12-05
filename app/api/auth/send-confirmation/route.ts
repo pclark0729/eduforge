@@ -19,26 +19,35 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServiceRoleClient()
 
-    // Generate confirmation link using invite type (doesn't require password)
-    const { data, error } = await supabase.auth.admin.generateLink({
-      type: 'invite',
-      email: email,
+    // Use resendConfirmationEmail which actually sends the email
+    const { error } = await supabase.auth.admin.resendConfirmationEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback?type=invite&next=/signin`,
     })
 
     if (error) {
-      throw error
-    }
+      // Fallback: try generateLink if resendConfirmationEmail fails
+      const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+        type: 'recovery', // Use recovery type for password reset/confirmation
+        email: email,
+      })
 
-    // The link is generated, but Supabase will send the email automatically
-    // when using the Admin API, or we can use the regular auth flow
-    // For now, we'll return success - Supabase should handle email sending
-    // based on your project's email settings
+      if (linkError) {
+        throw linkError
+      }
+
+      // Note: generateLink doesn't send emails automatically
+      // You would need to send the email manually using the link
+      return NextResponse.json({
+        success: true,
+        message: 'Confirmation link generated (email may need to be sent manually)',
+        // In development, return the link for testing
+        link: process.env.NODE_ENV === 'development' ? linkData?.properties?.action_link : undefined,
+      })
+    }
 
     return NextResponse.json({
       success: true,
       message: 'Confirmation email sent',
-      // In production, don't return the link
-      link: process.env.NODE_ENV === 'development' ? data?.properties?.action_link : undefined,
     })
   } catch (error: any) {
     console.error('Error sending confirmation email:', error)

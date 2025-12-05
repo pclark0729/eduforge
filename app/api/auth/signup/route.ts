@@ -63,27 +63,41 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Step 3: Send confirmation email only after profile is successfully created
-    // We use generateLink which creates the confirmation token
-    // Supabase will automatically send the email based on your project settings
-    const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
-      type: 'signup',
-      email: email,
-      password: password, // Required for signup type
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/signin`,
-      },
+    // Step 3: Send confirmation email
+    // When using admin.createUser with email_confirm: false, Supabase should automatically
+    // send a confirmation email IF email confirmations are enabled in project settings.
+    // However, to ensure the email is sent, we can use resendConfirmationEmail
+    const { error: resendError } = await supabase.auth.admin.resendConfirmationEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback?type=signup&next=/signin`,
     })
 
-    if (linkError) {
-      console.error('Error generating confirmation link:', linkError)
-      // Don't fail the signup, but log the error
-      // The user can request a new confirmation email later via Supabase dashboard
+    if (resendError) {
+      console.error('Error resending confirmation email:', resendError)
+      // Fallback: Generate link (for manual email sending if needed)
+      const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
+        type: 'signup',
+        email: email,
+        password: password,
+        options: {
+          redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/signin`,
+        },
+      })
+      
+      if (linkError) {
+        console.error('Error generating confirmation link (fallback):', linkError)
+        // Don't fail the signup, but log the error
+        // The user can request a new confirmation email later via Supabase dashboard
+      } else if (linkData?.properties?.action_link && process.env.NODE_ENV === 'development') {
+        // In development, log the link for testing
+        console.log('Confirmation link (dev only):', linkData.properties.action_link)
+      }
     }
 
-    // The confirmation email should be sent automatically by Supabase
-    // Make sure "Enable email confirmations" is enabled in Supabase Auth settings
-    // and "Confirm email" is required for sign-ins
+    // IMPORTANT: Make sure email confirmations are enabled in Supabase:
+    // 1. Go to Supabase Dashboard > Authentication > Settings
+    // 2. Enable "Enable email confirmations"
+    // 3. Set "Confirm email" to required
+    // 4. Configure your email provider (SMTP or use Supabase's built-in)
 
     return NextResponse.json({
       success: true,
