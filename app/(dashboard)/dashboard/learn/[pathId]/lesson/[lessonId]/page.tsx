@@ -49,7 +49,7 @@ export default async function LessonPage({
       last_accessed_at: new Date().toISOString(),
       status: progressAny.status === 'not_started' ? 'in_progress' : progressAny.status,
     }
-    await (supabase.from('user_progress').update(updateData as any) as any)
+    await ((supabase.from('user_progress') as any).update(updateData as any))
       .eq('id', progressAny.id)
   }
 
