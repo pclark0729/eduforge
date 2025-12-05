@@ -44,12 +44,11 @@ export default async function LessonPage({
       last_accessed_at: new Date().toISOString(),
     } as any)
   } else {
-    await supabase
-      .from('user_progress')
-      .update({
-        last_accessed_at: new Date().toISOString(),
-        status: existingProgress.status === 'not_started' ? 'in_progress' : existingProgress.status,
-      } as any)
+    const updateData = {
+      last_accessed_at: new Date().toISOString(),
+      status: existingProgress.status === 'not_started' ? 'in_progress' : existingProgress.status,
+    }
+    await (supabase.from('user_progress').update(updateData as any) as any)
       .eq('id', existingProgress.id)
   }
 
