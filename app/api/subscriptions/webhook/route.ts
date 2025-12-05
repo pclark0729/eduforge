@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
         // Get subscription from Stripe
         const subscriptionId = session.subscription as string
-        const subscription = await stripe.subscriptions.retrieve(subscriptionId)
+        const subscription: Stripe.Subscription = await stripe.subscriptions.retrieve(subscriptionId)
 
         // Create or update user subscription
         await (supabase
