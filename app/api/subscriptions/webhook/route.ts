@@ -60,7 +60,13 @@ export async function POST(request: NextRequest) {
         const subscriptionId = session.subscription as string
         const subscriptionResponse = await stripe.subscriptions.retrieve(subscriptionId)
         // Type assertion to ensure TypeScript recognizes this as Stripe.Subscription
-        const subscription = subscriptionResponse as unknown as Stripe.Subscription
+        // Use 'any' intermediate to bypass type checking issues
+        const subscription: Stripe.Subscription = subscriptionResponse as any
+
+        // Extract properties with explicit type assertions
+        const periodStart = (subscription as any).current_period_start as number
+        const periodEnd = (subscription as any).current_period_end as number
+        const cancelAtPeriodEnd = (subscription as any).cancel_at_period_end as boolean | null | undefined
 
         // Create or update user subscription
         await (supabase
@@ -71,9 +77,9 @@ export async function POST(request: NextRequest) {
             status: 'active',
             stripe_subscription_id: subscriptionId,
             stripe_customer_id: session.customer as string,
-            current_period_start: new Date((subscription as Stripe.Subscription).current_period_start * 1000).toISOString(),
-            current_period_end: new Date((subscription as Stripe.Subscription).current_period_end * 1000).toISOString(),
-            cancel_at_period_end: (subscription as Stripe.Subscription).cancel_at_period_end || false,
+            current_period_start: new Date(periodStart * 1000).toISOString(),
+            current_period_end: new Date(periodEnd * 1000).toISOString(),
+            cancel_at_period_end: cancelAtPeriodEnd || false,
           })
 
         console.log(`Subscription activated for user ${userId}, plan ${planId}`)
@@ -126,14 +132,18 @@ export async function POST(request: NextRequest) {
         if (invoice.subscription) {
           const subscriptionResponse = await stripe.subscriptions.retrieve(invoice.subscription as string)
           // Type assertion to ensure TypeScript recognizes this as Stripe.Subscription
-          const subscription = subscriptionResponse as unknown as Stripe.Subscription
+          const subscription: Stripe.Subscription = subscriptionResponse as any
+          
+          // Extract properties with explicit type assertions
+          const periodStart = (subscription as any).current_period_start as number
+          const periodEnd = (subscription as any).current_period_end as number
           
           await (supabase
             .from('user_subscriptions') as any)
             .update({
               status: 'active',
-              current_period_start: new Date((subscription as Stripe.Subscription).current_period_start * 1000).toISOString(),
-              current_period_end: new Date((subscription as Stripe.Subscription).current_period_end * 1000).toISOString(),
+              current_period_start: new Date(periodStart * 1000).toISOString(),
+              current_period_end: new Date(periodEnd * 1000).toISOString(),
             })
             .eq('stripe_customer_id', customerId)
         }
