@@ -33,7 +33,7 @@ export default async function DashboardPage() {
             ✓ Welcome back! Continue your learning journey.
           </p>
           <p className="text-terminal-info text-sm">
-            # Type 'help' for available commands
+            # Type &apos;help&apos; for available commands
           </p>
         </div>
       </div>

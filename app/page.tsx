@@ -68,7 +68,7 @@ export default function Home() {
 
         {/* Footer Info */}
         <div className="mt-8 text-center text-terminal-text text-xs opacity-70">
-          <p>Type 'help' for more information</p>
+          <p>Type &apos;help&apos; for more information</p>
           <p className="mt-2">
             <span className="text-terminal-green">eduforge@system</span>
             <span className="text-terminal-yellow">:</span>
