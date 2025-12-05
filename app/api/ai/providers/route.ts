@@ -44,32 +44,34 @@ export async function POST(request: NextRequest) {
 
     // If setting as active, deactivate other providers
     if (is_active) {
-      await supabase
-        .from('ai_providers')
+      await (supabase
+        .from('ai_providers') as any)
         .update({ is_active: false })
         .eq('user_id', user.id)
     }
 
     // Check if provider already exists
-    const { data: existing } = await supabase
-      .from('ai_providers')
+    const { data: existing } = await (supabase
+      .from('ai_providers') as any)
       .select('*')
       .eq('user_id', user.id)
       .eq('provider_name', provider_name)
       .single()
 
+    const existingAny = existing as any
+
     let result
-    if (existing) {
+    if (existingAny) {
       // Update existing
-      const { data, error } = await supabase
-        .from('ai_providers')
+      const { data, error } = await (supabase
+        .from('ai_providers') as any)
         .update({
-          api_key: api_key || existing.api_key,
-          base_url: base_url || existing.base_url,
-          model: model || existing.model,
-          is_active: is_active !== undefined ? is_active : existing.is_active,
+          api_key: api_key || existingAny.api_key,
+          base_url: base_url || existingAny.base_url,
+          model: model || existingAny.model,
+          is_active: is_active !== undefined ? is_active : existingAny.is_active,
         })
-        .eq('id', existing.id)
+        .eq('id', existingAny.id)
         .select()
         .single()
 
@@ -77,8 +79,8 @@ export async function POST(request: NextRequest) {
       result = data
     } else {
       // Create new
-      const { data, error } = await supabase
-        .from('ai_providers')
+      const { data, error } = await (supabase
+        .from('ai_providers') as any)
         .insert({
           user_id: user.id,
           provider_name,

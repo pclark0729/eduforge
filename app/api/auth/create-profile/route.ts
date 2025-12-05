@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
     // Use service role client to bypass RLS
     const supabase = createServiceRoleClient()
 
-    const { error } = await supabase
-      .from('user_profiles')
+    const { error } = await (supabase
+      .from('user_profiles') as any)
       .insert({
         id: userId,
         email,

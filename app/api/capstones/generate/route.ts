@@ -51,8 +51,8 @@ export async function POST(request: NextRequest) {
     const capstone = await generator.createCapstone(topic, level, concepts)
 
     // Save to database
-    const { data: savedCapstone, error: saveError } = await supabase
-      .from('capstone_projects')
+    const { data: savedCapstone, error: saveError } = await (supabase
+      .from('capstone_projects') as any)
       .insert({
         learning_path_id,
         title: capstone.title,

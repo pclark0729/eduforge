@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Create user profile (this happens before email is sent)
-    const { error: profileError } = await supabase
-      .from('user_profiles')
+    const { error: profileError } = await (supabase
+      .from('user_profiles') as any)
       .insert({
         id: authData.user.id,
         email: authData.user.email,
