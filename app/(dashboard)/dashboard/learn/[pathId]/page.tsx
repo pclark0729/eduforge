@@ -77,16 +77,16 @@ export default async function LearningPathPage({
   const progress = progressData
     ? {
         totalItems: progressData.length,
-        completed: progressData.filter((p) => p.status === 'completed').length,
-        inProgress: progressData.filter((p) => p.status === 'in_progress').length,
-        notStarted: progressData.filter((p) => p.status === 'not_started').length,
+        completed: (progressData as any[]).filter((p: any) => p.status === 'completed').length,
+        inProgress: (progressData as any[]).filter((p: any) => p.status === 'in_progress').length,
+        notStarted: (progressData as any[]).filter((p: any) => p.status === 'not_started').length,
         averageScore:
-          progressData
-            .filter((p) => p.score !== null)
-            .reduce((sum, p) => sum + (p.score || 0), 0) /
-          (progressData.filter((p) => p.score !== null).length || 1),
+          (progressData as any[])
+            .filter((p: any) => p.score !== null)
+            .reduce((sum: number, p: any) => sum + (p.score || 0), 0) /
+          ((progressData as any[]).filter((p: any) => p.score !== null).length || 1),
         completionRate:
-          progressData.filter((p) => p.status === 'completed').length /
+          (progressData as any[]).filter((p: any) => p.status === 'completed').length /
           progressData.length,
       }
     : undefined
