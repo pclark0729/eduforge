@@ -27,27 +27,31 @@ export async function POST(
       )
     }
 
+    const quizAny = quiz as any
+
     // Get learning path to extract concepts
     const { data: learningPath } = await supabase
       .from('learning_paths')
       .select('topic, milestones, key_concepts')
-      .eq('id', quiz.learning_path_id)
+      .eq('id', quizAny.learning_path_id)
       .single()
+
+    const learningPathAny = learningPath as any
 
     // Extract concepts for this quiz level
     let concepts: string[] = []
-    if (learningPath) {
-      const milestones = (learningPath.milestones as any[]) || []
-      const milestone = milestones.find((m: any) => m.level === quiz.level)
+    if (learningPathAny) {
+      const milestones = (learningPathAny.milestones as any[]) || []
+      const milestone = milestones.find((m: any) => m.level === quizAny.level)
       if (milestone && milestone.concepts) {
         concepts = milestone.concepts
-      } else if (learningPath.key_concepts) {
-        concepts = learningPath.key_concepts
+      } else if (learningPathAny.key_concepts) {
+        concepts = learningPathAny.key_concepts
       }
     }
 
     if (concepts.length === 0) {
-      concepts = [learningPath?.topic || 'the topic']
+      concepts = [learningPathAny?.topic || 'the topic']
     }
 
     // Get AI provider
@@ -66,13 +70,13 @@ export async function POST(
     const generator = new ContentGenerator(provider)
     const newQuiz = await generator.createQuiz(
       concepts,
-      quiz.level,
-      quiz.type || 'quiz'
+      quizAny.level,
+      quizAny.type || 'quiz'
     )
 
     // Update quiz with new questions
-    const { data: updatedQuiz, error: updateError } = await supabase
-      .from('quizzes')
+    const { data: updatedQuiz, error: updateError } = await (supabase
+      .from('quizzes') as any)
       .update({
         title: newQuiz.title,
         questions: newQuiz.questions,
@@ -101,6 +105,7 @@ export async function POST(
     )
   }
 }
+
 
 
 

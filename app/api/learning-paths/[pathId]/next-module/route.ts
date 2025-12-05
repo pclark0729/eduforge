@@ -48,24 +48,27 @@ export async function GET(
       return NextResponse.json({ nextModule: null })
     }
 
+    const currentLessonAny = currentLesson as any
+
     // Strategy: Try to find next lesson, then worksheet, then quiz for the same level
     // 1. Check for next lesson in sequence
     const { data: nextLesson } = await supabase
       .from('lessons')
       .select('id, title, order_index')
       .eq('learning_path_id', params.pathId)
-      .eq('level', currentLesson.level)
+      .eq('level', currentLessonAny.level)
       .gt('order_index', orderIndex)
       .order('order_index', { ascending: true })
       .limit(1)
       .single()
 
-    if (nextLesson) {
+    const nextLessonAny = nextLesson as any
+    if (nextLessonAny) {
       return NextResponse.json({
         nextModule: {
           type: 'lesson',
-          id: nextLesson.id,
-          title: nextLesson.title,
+          id: nextLessonAny.id,
+          title: nextLessonAny.title,
         },
       })
     }
@@ -79,12 +82,13 @@ export async function GET(
       .limit(1)
       .single()
 
-    if (worksheet) {
+    const worksheetAny = worksheet as any
+    if (worksheetAny) {
       return NextResponse.json({
         nextModule: {
           type: 'worksheet',
-          id: worksheet.id,
-          title: worksheet.title,
+          id: worksheetAny.id,
+          title: worksheetAny.title,
         },
       })
     }
@@ -94,16 +98,17 @@ export async function GET(
       .from('quizzes')
       .select('id, title')
       .eq('learning_path_id', params.pathId)
-      .eq('level', currentLesson.level)
+      .eq('level', currentLessonAny.level)
       .limit(1)
       .single()
 
-    if (quiz) {
+    const quizAny = quiz as any
+    if (quizAny) {
       return NextResponse.json({
         nextModule: {
           type: 'quiz',
-          id: quiz.id,
-          title: quiz.title,
+          id: quizAny.id,
+          title: quizAny.title,
         },
       })
     }
@@ -118,12 +123,13 @@ export async function GET(
       .limit(1)
       .single()
 
-    if (anyNextLesson) {
+    const anyNextLessonAny = anyNextLesson as any
+    if (anyNextLessonAny) {
       return NextResponse.json({
         nextModule: {
           type: 'lesson',
-          id: anyNextLesson.id,
-          title: anyNextLesson.title,
+          id: anyNextLessonAny.id,
+          title: anyNextLessonAny.title,
         },
       })
     }
@@ -138,6 +144,7 @@ export async function GET(
     )
   }
 }
+
 
 
 

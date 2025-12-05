@@ -27,17 +27,20 @@ export async function POST(
       )
     }
 
+    const worksheetAny = worksheet as any
+
     // Get lesson context if available
     let lessonContext
-    if (worksheet.lesson_id) {
+    if (worksheetAny.lesson_id) {
       const { data: lesson } = await supabase
         .from('lessons')
         .select('title, concept, simple_explanation')
-        .eq('id', worksheet.lesson_id)
+        .eq('id', worksheetAny.lesson_id)
         .single()
 
-      if (lesson) {
-        lessonContext = `${lesson.title}: ${lesson.simple_explanation}`
+      const lessonAny = lesson as any
+      if (lessonAny) {
+        lessonContext = `${lessonAny.title}: ${lessonAny.simple_explanation}`
       }
     }
 
@@ -55,19 +58,19 @@ export async function POST(
 
     // Regenerate worksheet
     const generator = new ContentGenerator(provider)
-    const concept = worksheet.lesson_id 
-      ? (await supabase.from('lessons').select('concept').eq('id', worksheet.lesson_id).single()).data?.concept || 'concept'
+    const concept = worksheetAny.lesson_id 
+      ? ((await supabase.from('lessons').select('concept').eq('id', worksheetAny.lesson_id).single()).data as any)?.concept || 'concept'
       : 'concept'
 
     const newWorksheet = await generator.createWorksheet(
       concept,
-      worksheet.level,
+      worksheetAny.level,
       lessonContext
     )
 
     // Update worksheet with new questions
-    const { data: updatedWorksheet, error: updateError } = await supabase
-      .from('worksheets')
+    const { data: updatedWorksheet, error: updateError } = await (supabase
+      .from('worksheets') as any)
       .update({
         title: newWorksheet.title,
         questions: newWorksheet.questions,
@@ -94,6 +97,7 @@ export async function POST(
     )
   }
 }
+
 
 
 

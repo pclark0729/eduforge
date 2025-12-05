@@ -24,36 +24,38 @@ export async function GET(
       )
     }
 
+    const quizAny = quiz as any
+
     // Ensure questions and answer_key are properly parsed
     // Supabase JSONB fields are automatically parsed, but ensure they're arrays/objects
-    if (quiz.questions && typeof quiz.questions === 'string') {
+    if (quizAny.questions && typeof quizAny.questions === 'string') {
       try {
-        quiz.questions = JSON.parse(quiz.questions)
+        quizAny.questions = JSON.parse(quizAny.questions)
       } catch (e) {
         console.error('Error parsing questions:', e)
       }
     }
     
-    if (quiz.answer_key && typeof quiz.answer_key === 'string') {
+    if (quizAny.answer_key && typeof quizAny.answer_key === 'string') {
       try {
-        quiz.answer_key = JSON.parse(quiz.answer_key)
+        quizAny.answer_key = JSON.parse(quizAny.answer_key)
       } catch (e) {
         console.error('Error parsing answer_key:', e)
       }
     }
 
     // Validate questions structure
-    if (!Array.isArray(quiz.questions)) {
-      console.error('Questions is not an array:', quiz.questions)
-      quiz.questions = []
+    if (!Array.isArray(quizAny.questions)) {
+      console.error('Questions is not an array:', quizAny.questions)
+      quizAny.questions = []
     }
 
     // Add learning_path_id for navigation
-    if (quiz.learning_paths && typeof quiz.learning_paths === 'object') {
-      quiz.learning_path_id = (quiz.learning_paths as any).id
+    if (quizAny.learning_paths && typeof quizAny.learning_paths === 'object') {
+      quizAny.learning_path_id = (quizAny.learning_paths as any).id
     }
 
-    return NextResponse.json({ quiz })
+    return NextResponse.json({ quiz: quizAny })
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || 'Failed to get quiz' },

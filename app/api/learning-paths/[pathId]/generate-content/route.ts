@@ -37,8 +37,9 @@ export async function POST(
       )
     }
 
-    const milestones = (learningPath.milestones as any[]) || []
-    const milestone = milestones.find((m) => m.level === milestoneLevel)
+    const learningPathAny = learningPath as any
+    const milestones = (learningPathAny.milestones as any[]) || []
+    const milestone = milestones.find((m: any) => m.level === milestoneLevel)
 
     if (!milestone) {
       return NextResponse.json(
@@ -68,6 +69,8 @@ export async function POST(
       .eq('id', user.id)
       .single()
 
+    const profileAny = profile as any
+
     const generatedContent = {
       lessons: [] as any[],
       worksheets: [] as any[],
@@ -83,12 +86,12 @@ export async function POST(
         const lesson = await generator.createLesson(
           concept,
           milestoneLevel,
-          profile?.learning_style || undefined,
-          `Part of ${learningPath.title} - ${milestoneLevel} level`
+          profileAny?.learning_style || undefined,
+          `Part of ${learningPathAny.title} - ${milestoneLevel} level`
         )
 
-        const { data: savedLesson, error: lessonError } = await supabase
-          .from('lessons')
+        const { data: savedLesson, error: lessonError } = await (supabase
+          .from('lessons') as any)
           .insert({
             learning_path_id: params.pathId,
             title: lesson.title,
@@ -112,8 +115,9 @@ export async function POST(
           throw new Error(`Failed to save lesson: ${lessonError.message}`)
         }
 
-        if (savedLesson) {
-          generatedContent.lessons.push(savedLesson)
+        const savedLessonAny = savedLesson as any
+        if (savedLessonAny) {
+          generatedContent.lessons.push(savedLessonAny)
 
           // Generate worksheet for this lesson
           try {
@@ -123,11 +127,11 @@ export async function POST(
               `${lesson.title}: ${lesson.simple_explanation}`
             )
 
-            const { data: savedWorksheet, error: worksheetError } = await supabase
-              .from('worksheets')
+            const { data: savedWorksheet, error: worksheetError } = await (supabase
+              .from('worksheets') as any)
               .insert({
                 learning_path_id: params.pathId,
-                lesson_id: savedLesson.id,
+                lesson_id: savedLessonAny.id,
                 title: worksheet.title,
                 level: worksheet.level,
                 questions: worksheet.questions,
@@ -136,10 +140,11 @@ export async function POST(
               .select()
               .single()
 
+            const savedWorksheetAny = savedWorksheet as any
             if (worksheetError) {
               console.error(`Error saving worksheet for ${concept}:`, worksheetError)
-            } else if (savedWorksheet) {
-              generatedContent.worksheets.push(savedWorksheet)
+            } else if (savedWorksheetAny) {
+              generatedContent.worksheets.push(savedWorksheetAny)
             }
           } catch (worksheetErr: any) {
             console.error(`Error generating worksheet for ${concept}:`, worksheetErr)
@@ -160,8 +165,8 @@ export async function POST(
         'quiz'
       )
 
-      const { data: savedQuiz, error: quizError } = await supabase
-        .from('quizzes')
+      const { data: savedQuiz, error: quizError } = await (supabase
+        .from('quizzes') as any)
         .insert({
           learning_path_id: params.pathId,
           title: quiz.title,
@@ -175,10 +180,11 @@ export async function POST(
         .select()
         .single()
 
+      const savedQuizAny = savedQuiz as any
       if (quizError) {
         console.error('Error saving quiz:', quizError)
-      } else if (savedQuiz) {
-        generatedContent.quizzes.push(savedQuiz)
+      } else if (savedQuizAny) {
+        generatedContent.quizzes.push(savedQuizAny)
       }
     } catch (quizErr: any) {
       console.error('Error generating quiz:', quizErr)
@@ -189,13 +195,13 @@ export async function POST(
     if (milestoneLevel === 'advanced' || milestoneLevel === 'expert') {
       try {
         const capstone = await generator.createCapstone(
-          learningPath.topic,
+          learningPathAny.topic,
           milestoneLevel,
           milestone.concepts
         )
 
-        const { data: savedCapstone, error: capstoneError } = await supabase
-          .from('capstone_projects')
+        const { data: savedCapstone, error: capstoneError } = await (supabase
+          .from('capstone_projects') as any)
           .insert({
             learning_path_id: params.pathId,
             title: capstone.title,
@@ -210,10 +216,11 @@ export async function POST(
           .select()
           .single()
 
+        const savedCapstoneAny = savedCapstone as any
         if (capstoneError) {
           console.error('Error saving capstone:', capstoneError)
-        } else if (savedCapstone) {
-          generatedContent.capstone = savedCapstone
+        } else if (savedCapstoneAny) {
+          generatedContent.capstone = savedCapstoneAny
         }
       } catch (capstoneErr: any) {
         console.error('Error generating capstone:', capstoneErr)

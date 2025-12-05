@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
     const quiz = await generator.createQuiz(concepts, level, type)
 
     // Save to database
-    const { data: savedQuiz, error: saveError } = await supabase
-      .from('quizzes')
+    const { data: savedQuiz, error: saveError } = await (supabase
+      .from('quizzes') as any)
       .insert({
         learning_path_id: learning_path_id || null,
         title: quiz.title,
@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
 
 
 

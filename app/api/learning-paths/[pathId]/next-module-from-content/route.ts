@@ -47,12 +47,13 @@ export async function GET(
         .limit(1)
         .single()
 
-      if (quiz) {
+      const quizAny = quiz as any
+      if (quizAny) {
         return NextResponse.json({
           nextModule: {
             type: 'quiz',
-            id: quiz.id,
-            title: quiz.title,
+            id: quizAny.id,
+            title: quizAny.title,
           },
         })
       }
@@ -68,15 +69,17 @@ export async function GET(
         .eq('id', contentId)
         .single()
 
-      if (worksheet?.lesson_id) {
+      const worksheetAny = worksheet as any
+      if (worksheetAny?.lesson_id) {
         const { data: lesson } = await supabase
           .from('lessons')
           .select('order_index')
-          .eq('id', worksheet.lesson_id)
+          .eq('id', worksheetAny.lesson_id)
           .single()
 
-        if (lesson) {
-          lessonOrderIndex = lesson.order_index
+        const lessonAny = lesson as any
+        if (lessonAny) {
+          lessonOrderIndex = lessonAny.order_index
         }
       }
     }
@@ -91,12 +94,13 @@ export async function GET(
       .limit(1)
       .single()
 
-    if (nextLesson) {
+    const nextLessonAny = nextLesson as any
+    if (nextLessonAny) {
       return NextResponse.json({
         nextModule: {
           type: 'lesson',
-          id: nextLesson.id,
-          title: nextLesson.title,
+          id: nextLessonAny.id,
+          title: nextLessonAny.title,
         },
       })
     }
@@ -111,6 +115,7 @@ export async function GET(
     )
   }
 }
+
 
 
 

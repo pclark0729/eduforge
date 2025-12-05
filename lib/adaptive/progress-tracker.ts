@@ -33,7 +33,7 @@ export class ProgressTracker {
         update.content_type === 'worksheet' ? 'worksheet_id' :
         update.content_type === 'quiz' ? 'quiz_id' :
         'capstone_id',
-        update.lesson_id || update.worksheet_id || update.quiz_id || update.capstone_id
+        (update.lesson_id || update.worksheet_id || update.quiz_id || update.capstone_id) as any
       )
       .single()
 
@@ -53,13 +53,15 @@ export class ProgressTracker {
       completed_at: update.status === 'completed' ? new Date().toISOString() : null,
     }
 
-    if (existing) {
-      await supabase
-        .from('user_progress')
+    const existingAny = existing as any
+
+    if (existingAny) {
+      await (supabase
+        .from('user_progress') as any)
         .update(progressData)
-        .eq('id', existing.id)
+        .eq('id', existingAny.id)
     } else {
-      await supabase.from('user_progress').insert(progressData)
+      await (supabase.from('user_progress') as any).insert(progressData)
     }
 
     // Update spaced repetition if content is completed
@@ -93,21 +95,23 @@ export class ProgressTracker {
     else if (score >= 60) performance = 'fair'
     else performance = 'poor'
 
-    if (existing) {
+    const existingAny = existing as any
+
+    if (existingAny) {
       const updated = updateSpacedRepetition(
         {
-          content_id: existing.content_id,
-          content_type: existing.content_type,
-          difficulty_level: existing.difficulty_level,
-          next_review_date: new Date(existing.next_review_date),
-          review_count: existing.review_count,
-          last_reviewed_at: existing.last_reviewed_at ? new Date(existing.last_reviewed_at) : null,
+          content_id: existingAny.content_id,
+          content_type: existingAny.content_type,
+          difficulty_level: existingAny.difficulty_level,
+          next_review_date: new Date(existingAny.next_review_date),
+          review_count: existingAny.review_count,
+          last_reviewed_at: existingAny.last_reviewed_at ? new Date(existingAny.last_reviewed_at) : null,
         },
         performance
       )
 
-      await supabase
-        .from('spaced_repetition')
+      await (supabase
+        .from('spaced_repetition') as any)
         .update({
           difficulty_level: updated.difficulty_level,
           review_count: updated.review_count,
@@ -120,10 +124,10 @@ export class ProgressTracker {
             ? updated.next_review_date.toISOString()
             : new Date(updated.next_review_date).toISOString(),
         })
-        .eq('id', existing.id)
+        .eq('id', existingAny.id)
     } else {
       const newItem = createSpacedRepetitionItem(contentId, contentType)
-      await supabase.from('spaced_repetition').insert({
+      await (supabase.from('spaced_repetition') as any).insert({
         user_id: this.userId,
         content_id: newItem.content_id,
         content_type: newItem.content_type,
@@ -156,9 +160,10 @@ export class ProgressTracker {
       }
     }
 
-    const completed = progress.filter((p) => p.status === 'completed').length
-    const inProgress = progress.filter((p) => p.status === 'in_progress').length
-    const scores = progress.filter((p) => p.score !== null).map((p) => p.score!)
+    const progressAny = progress as any[]
+    const completed = progressAny.filter((p: any) => p.status === 'completed').length
+    const inProgress = progressAny.filter((p: any) => p.status === 'in_progress').length
+    const scores = progressAny.filter((p: any) => p.score !== null).map((p: any) => p.score!)
 
     return {
       totalItems: progress.length,
@@ -182,6 +187,7 @@ export class ProgressTracker {
 
     if (!path) return null
 
+    const pathAny = path as any
     const performance = {
       averageScore: summary.averageScore,
       completionRate: summary.completionRate,
@@ -189,7 +195,7 @@ export class ProgressTracker {
       attempts: summary.completed,
     }
 
-    return getRecommendedContent(path.level as any, performance)
+    return getRecommendedContent(pathAny.level as any, performance)
   }
 }
 

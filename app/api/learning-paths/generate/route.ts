@@ -42,8 +42,8 @@ export async function POST(request: NextRequest) {
     )
 
     // Save to database
-    const { data: savedPath, error: saveError } = await supabase
-      .from('learning_paths')
+    const { data: savedPath, error: saveError } = await (supabase
+      .from('learning_paths') as any)
       .insert({
         user_id: user.id,
         learning_goal_id: goalId || null,
@@ -87,9 +87,9 @@ export async function POST(request: NextRequest) {
     generateContentInBackground(
       supabase,
       generator,
-      savedPath.id,
+      (savedPath as any).id,
       learningPath,
-      profile?.learning_style || null
+      (profile as any)?.learning_style || null
     ).catch((error) => {
       console.error('Error generating content in background:', error)
     })

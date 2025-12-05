@@ -58,7 +58,7 @@ export async function generateMilestoneContent(
           real_world_use_cases: lesson.real_world_use_cases,
           analogies: lesson.analogies,
           visual_models: lesson.visual_models,
-          step_by_step_examples: lesson.step_by_step_examples as Json,
+          step_by_step_examples: lesson.step_by_step_examples as unknown as Json,
           common_mistakes: lesson.common_mistakes,
           estimated_minutes: lesson.estimated_minutes,
         } as any)
@@ -88,7 +88,7 @@ export async function generateMilestoneContent(
             .from('worksheets')
             .insert({
               learning_path_id: learningPathId,
-              lesson_id: savedLesson.id,
+              lesson_id: (savedLesson as any).id,
               title: worksheet.title,
               level: worksheet.level,
               questions: worksheet.questions,
@@ -101,7 +101,7 @@ export async function generateMilestoneContent(
             console.error(`Error saving worksheet for ${concept}:`, worksheetError)
             console.error('Worksheet data:', JSON.stringify(worksheet, null, 2))
           } else if (savedWorksheet) {
-            console.log(`Worksheet saved successfully: ${savedWorksheet.id}`)
+            console.log(`Worksheet saved successfully: ${(savedWorksheet as any).id}`)
             generatedContent.worksheets.push(savedWorksheet)
           } else {
             console.warn(`Worksheet not saved - no data returned`)
@@ -186,7 +186,7 @@ export async function generateMilestoneContent(
       })
       throw quizError // Re-throw to ensure it's not silently ignored
     } else if (savedQuiz) {
-      console.log(`✓ Quiz saved successfully to database: ${savedQuiz.id}`)
+      console.log(`✓ Quiz saved successfully to database: ${(savedQuiz as any).id}`)
       generatedContent.quizzes.push(savedQuiz)
     } else {
       console.error('❌ ERROR: Quiz insert returned no data')
@@ -238,7 +238,7 @@ export async function generateMilestoneContent(
         console.error('Error saving capstone:', capstoneError)
         console.error('Capstone data:', JSON.stringify(capstone, null, 2))
       } else if (savedCapstone) {
-        console.log(`Capstone saved successfully: ${savedCapstone.id}`)
+        console.log(`Capstone saved successfully: ${(savedCapstone as any).id}`)
         generatedContent.capstones.push(savedCapstone)
       } else {
         console.warn(`Capstone not saved - no data returned`)

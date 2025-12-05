@@ -53,18 +53,21 @@ export async function POST(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
+    const pathAny = path as any
+    const profileAny = profile as any
+
     // Generate lesson
     const generator = new ContentGenerator(provider)
     const lesson = await generator.createLesson(
       concept,
       level,
-      learningStyle || profile?.learning_style || undefined,
-      `Part of learning path: ${path.title}`
+      learningStyle || profileAny?.learning_style || undefined,
+      `Part of learning path: ${pathAny.title}`
     )
 
     // Save to database
-    const { data: savedLesson, error: saveError } = await supabase
-      .from('lessons')
+    const { data: savedLesson, error: saveError } = await (supabase
+      .from('lessons') as any)
       .insert({
         learning_path_id,
         title: lesson.title,
@@ -96,6 +99,7 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
 
 
 

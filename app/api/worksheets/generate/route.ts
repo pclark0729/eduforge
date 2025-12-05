@@ -40,8 +40,9 @@ export async function POST(request: NextRequest) {
         .eq('id', lesson_id)
         .single()
 
-      if (lesson) {
-        lessonContext = `${lesson.title}: ${lesson.simple_explanation}`
+      const lessonAny = lesson as any
+      if (lessonAny) {
+        lessonContext = `${lessonAny.title}: ${lessonAny.simple_explanation}`
       }
     }
 
@@ -50,8 +51,8 @@ export async function POST(request: NextRequest) {
     const worksheet = await generator.createWorksheet(concept, level, lessonContext)
 
     // Save to database
-    const { data: savedWorksheet, error: saveError } = await supabase
-      .from('worksheets')
+    const { data: savedWorksheet, error: saveError } = await (supabase
+      .from('worksheets') as any)
       .insert({
         learning_path_id: learning_path_id || null,
         lesson_id: lesson_id || null,
@@ -76,6 +77,7 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
 
 
 

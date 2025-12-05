@@ -24,43 +24,45 @@ export async function GET(
       )
     }
 
+    const worksheetAny = worksheet as any
+
     // Ensure questions and answer_key are properly parsed
-    if (worksheet.questions && typeof worksheet.questions === 'string') {
+    if (worksheetAny.questions && typeof worksheetAny.questions === 'string') {
       try {
-        worksheet.questions = JSON.parse(worksheet.questions)
+        worksheetAny.questions = JSON.parse(worksheetAny.questions)
       } catch (e) {
         console.error('Error parsing questions:', e)
       }
     }
     
-    if (worksheet.answer_key && typeof worksheet.answer_key === 'string') {
+    if (worksheetAny.answer_key && typeof worksheetAny.answer_key === 'string') {
       try {
-        worksheet.answer_key = JSON.parse(worksheet.answer_key)
+        worksheetAny.answer_key = JSON.parse(worksheetAny.answer_key)
       } catch (e) {
         console.error('Error parsing answer_key:', e)
       }
     }
 
     // Validate questions structure
-    if (!Array.isArray(worksheet.questions)) {
-      console.error('Questions is not an array:', worksheet.questions)
-      worksheet.questions = []
+    if (!Array.isArray(worksheetAny.questions)) {
+      console.error('Questions is not an array:', worksheetAny.questions)
+      worksheetAny.questions = []
     }
 
     // Add learning_path_id for navigation
-    if (worksheet.learning_paths && typeof worksheet.learning_paths === 'object') {
-      worksheet.learning_path_id = (worksheet.learning_paths as any).id
+    if (worksheetAny.learning_paths && typeof worksheetAny.learning_paths === 'object') {
+      worksheetAny.learning_path_id = (worksheetAny.learning_paths as any).id
     }
 
     // Log for debugging
     console.log('Worksheet data:', {
-      id: worksheet.id,
-      title: worksheet.title,
-      questionsCount: Array.isArray(worksheet.questions) ? worksheet.questions.length : 0,
-      answerKeyCount: worksheet.answer_key ? Object.keys(worksheet.answer_key).length : 0,
+      id: worksheetAny.id,
+      title: worksheetAny.title,
+      questionsCount: Array.isArray(worksheetAny.questions) ? worksheetAny.questions.length : 0,
+      answerKeyCount: worksheetAny.answer_key ? Object.keys(worksheetAny.answer_key).length : 0,
     })
 
-    return NextResponse.json({ worksheet })
+    return NextResponse.json({ worksheet: worksheetAny })
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || 'Failed to get worksheet' },
