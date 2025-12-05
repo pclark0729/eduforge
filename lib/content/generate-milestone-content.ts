@@ -93,7 +93,7 @@ export async function generateMilestoneContent(
               level: worksheet.level,
               questions: worksheet.questions,
               answer_key: worksheet.answer_key,
-            })
+            } as any)
             .select()
             .single()
 
@@ -230,7 +230,7 @@ export async function generateMilestoneContent(
           evaluation_rubric: capstone.evaluation_rubric,
           extension_challenges: capstone.extension_challenges,
           estimated_hours: capstone.estimated_hours,
-        })
+        } as any)
         .select()
         .single()
 
