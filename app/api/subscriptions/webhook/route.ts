@@ -59,7 +59,8 @@ export async function POST(request: NextRequest) {
         // Get subscription from Stripe
         const subscriptionId = session.subscription as string
         const subscriptionResponse = await stripe.subscriptions.retrieve(subscriptionId)
-        const subscription = subscriptionResponse as Stripe.Subscription
+        // Type assertion to ensure TypeScript recognizes this as Stripe.Subscription
+        const subscription: Stripe.Subscription = subscriptionResponse as Stripe.Subscription
 
         // Create or update user subscription
         await (supabase
@@ -124,7 +125,8 @@ export async function POST(request: NextRequest) {
         // Update subscription period if payment succeeded
         if (invoice.subscription) {
           const subscriptionResponse = await stripe.subscriptions.retrieve(invoice.subscription as string)
-          const subscription = subscriptionResponse as Stripe.Subscription
+          // Type assertion to ensure TypeScript recognizes this as Stripe.Subscription
+          const subscription: Stripe.Subscription = subscriptionResponse as Stripe.Subscription
           
           await (supabase
             .from('user_subscriptions') as any)
