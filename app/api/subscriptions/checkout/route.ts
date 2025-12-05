@@ -5,6 +5,9 @@ import { SUBSCRIPTION_PLANS } from '@/lib/subscriptions/plans'
 import { stripe } from '@/lib/stripe/config'
 import Stripe from 'stripe'
 
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic'
+
 if (!stripe) {
   console.warn('Stripe is not configured - checkout will not work')
 }

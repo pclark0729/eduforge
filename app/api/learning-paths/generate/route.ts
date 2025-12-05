@@ -7,6 +7,9 @@ import { generateMilestoneContent } from '@/lib/content/generate-milestone-conte
 import { setGenerationProgress, clearGenerationProgress } from '@/lib/utils/generation-progress'
 import { checkUsage, incrementUsage } from '@/lib/subscriptions/usage'
 
+// Force dynamic rendering since this route uses cookies for authentication
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const user = await requireAuth()
