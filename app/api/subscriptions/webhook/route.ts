@@ -136,8 +136,12 @@ export async function POST(request: NextRequest) {
         const customerId = invoice.customer as string
 
         // Update subscription period if payment succeeded
-        if (invoice.subscription) {
-          const subscriptionResponse = await stripe.subscriptions.retrieve(invoice.subscription as string)
+        // Access subscription property through 'any' to bypass TypeScript type checking
+        const invoiceAny = invoice as any
+        const subscriptionId = invoiceAny.subscription as string | null | undefined
+        
+        if (subscriptionId) {
+          const subscriptionResponse = await stripe.subscriptions.retrieve(subscriptionId)
           // Type assertion to ensure TypeScript recognizes this as Stripe.Subscription
           const subscription: Stripe.Subscription = subscriptionResponse as any
           
