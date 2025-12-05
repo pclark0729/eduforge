@@ -151,7 +151,9 @@ export default function CreatePathPage() {
                   </Link>
                 </div>
               ) : (
-                <span className="text-terminal-red">✗ ERROR:</span> {error}
+                <>
+                  <span className="text-terminal-red">✗ ERROR:</span> {error}
+                </>
               )}
             </div>
           </div>
