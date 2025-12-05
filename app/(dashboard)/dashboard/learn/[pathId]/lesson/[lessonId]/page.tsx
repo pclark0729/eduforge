@@ -49,7 +49,7 @@ export default async function LessonPage({
       .update({
         last_accessed_at: new Date().toISOString(),
         status: existingProgress.status === 'not_started' ? 'in_progress' : existingProgress.status,
-      })
+      } as any)
       .eq('id', existingProgress.id)
   }
 
