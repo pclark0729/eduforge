@@ -14,7 +14,7 @@ export async function checkUsage(userId: string): Promise<UsageInfo> {
   const supabase = await createServerComponentClient()
 
   // Check if user can create course using database function
-  const { data: canCreateResult } = await supabase.rpc('can_create_course', {
+  const { data: canCreateResult } = await (supabase.rpc as any)('can_create_course', {
     p_user_id: userId,
   })
 
@@ -97,7 +97,7 @@ export async function checkUsage(userId: string): Promise<UsageInfo> {
 export async function incrementUsage(userId: string): Promise<void> {
   const supabase = await createServerComponentClient()
 
-  await supabase.rpc('increment_course_usage', {
+  await (supabase.rpc as any)('increment_course_usage', {
     p_user_id: userId,
   })
 }
