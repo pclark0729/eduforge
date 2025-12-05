@@ -19,9 +19,9 @@ export async function POST(request: NextRequest) {
 
     const supabase = createServiceRoleClient()
 
-    // Generate confirmation link
+    // Generate confirmation link using invite type (doesn't require password)
     const { data, error } = await supabase.auth.admin.generateLink({
-      type: 'signup',
+      type: 'invite',
       email: email,
     })
 
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     )
   }
 }
+
 
 
 
