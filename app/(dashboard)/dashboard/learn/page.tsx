@@ -23,7 +23,7 @@ export default async function MyLearningPage() {
 
       {learningPaths && learningPaths.length > 0 ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {learningPaths.map((path) => (
+          {(learningPaths as any[]).map((path: any) => (
             <Link
               key={path.id}
               href={`/dashboard/learn/${path.id}`}
