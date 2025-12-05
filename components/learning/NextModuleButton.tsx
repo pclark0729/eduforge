@@ -25,6 +25,7 @@ export default function NextModuleButton({
 
   useEffect(() => {
     fetchNextModule()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathId, currentLessonId, currentOrderIndex])
 
   const fetchNextModule = async () => {
@@ -49,7 +50,7 @@ export default function NextModuleButton({
     return (
       <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          🎉 Congratulations! You've completed this module. Return to the learning path to explore more content.
+          🎉 Congratulations! You&apos;ve completed this module. Return to the learning path to explore more content.
         </p>
         <Link
           href={`/dashboard/learn/${pathId}`}
@@ -111,6 +112,7 @@ export default function NextModuleButton({
     </div>
   )
 }
+
 
 
 

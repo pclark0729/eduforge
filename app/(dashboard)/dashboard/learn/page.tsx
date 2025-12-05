@@ -49,7 +49,7 @@ export default async function MyLearningPage() {
       ) : (
         <div className="rounded-lg border border-gray-200 bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-800">
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            You don't have any learning paths yet.
+            You don&apos;t have any learning paths yet.
           </p>
           <Link
             href="/dashboard/create-path"
@@ -62,6 +62,7 @@ export default async function MyLearningPage() {
     </div>
   )
 }
+
 
 
 

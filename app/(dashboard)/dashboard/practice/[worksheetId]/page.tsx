@@ -12,6 +12,7 @@ export default function WorksheetPage() {
 
   useEffect(() => {
     fetchWorksheet()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchWorksheet = async () => {

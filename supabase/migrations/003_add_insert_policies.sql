@@ -42,3 +42,4 @@ CREATE POLICY "Users can insert own capstone projects" ON public.capstone_projec
 
 
 
+

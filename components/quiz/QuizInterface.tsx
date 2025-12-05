@@ -58,6 +58,7 @@ export default function QuizInterface({ quiz, onSubmit, showNextModule = true }:
         optionsCount: q.options?.length || 0,
       })),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export default function QuizInterface({ quiz, onSubmit, showNextModule = true }:
     } else if (timeRemaining === 0 && !submitted) {
       handleSubmit()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRemaining, submitted])
 
   const handleAnswerChange = (questionId: string, value: any) => {

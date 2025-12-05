@@ -28,6 +28,7 @@ export default function ProgressTracker({ learningPathId }: ProgressTrackerProps
 
   useEffect(() => {
     fetchProgress()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [learningPathId])
 
   const fetchProgress = async () => {
@@ -118,6 +119,7 @@ export default function ProgressTracker({ learningPathId }: ProgressTrackerProps
     </div>
   )
 }
+
 
 
 

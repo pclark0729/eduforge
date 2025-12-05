@@ -49,6 +49,7 @@ export default function WorksheetInterface({
       })),
       answerKeyKeys: Object.keys(worksheet.answer_key || {}),
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAnswerChange = (questionId: string, value: any) => {

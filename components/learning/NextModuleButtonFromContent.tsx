@@ -25,6 +25,7 @@ export default function NextModuleButtonFromContent({
 
   useEffect(() => {
     fetchNextModule()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathId, contentType, contentId, contentLevel])
 
   const fetchNextModule = async () => {
@@ -97,6 +98,7 @@ export default function NextModuleButtonFromContent({
     </div>
   )
 }
+
 
 
 

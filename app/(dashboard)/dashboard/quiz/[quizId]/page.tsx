@@ -11,6 +11,7 @@ export default function QuizPage() {
 
   useEffect(() => {
     fetchQuiz()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const fetchQuiz = async () => {

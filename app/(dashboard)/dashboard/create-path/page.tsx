@@ -72,7 +72,7 @@ export default function CreatePathPage() {
       <div>
         <h1 className="text-3xl font-bold">Create Learning Path</h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Enter a topic you want to learn, and we'll create a complete learning path with lessons, worksheets, and quizzes for all levels.
+          Enter a topic you want to learn, and we&apos;ll create a complete learning path with lessons, worksheets, and quizzes for all levels.
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export default function CreatePathPage() {
             className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700"
           />
           <p className="mt-1 text-sm text-gray-500">
-            Be as specific or general as you like. We'll break it down for you.
+            Be as specific or general as you like. We&apos;ll break it down for you.
           </p>
         </div>
 
