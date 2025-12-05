@@ -4,9 +4,9 @@ export interface SpacedRepetitionItem {
   content_id: string
   content_type: string
   difficulty_level: number // 1-5 scale
-  next_review_date: Date
+  next_review_date: Date | string
   review_count: number
-  last_reviewed_at: Date | null
+  last_reviewed_at: Date | string | null
 }
 
 /**
@@ -97,6 +97,9 @@ export function createSpacedRepetitionItem(
     last_reviewed_at: null,
   }
 }
+
+
+
 
 
 

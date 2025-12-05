@@ -111,8 +111,14 @@ export class ProgressTracker {
         .update({
           difficulty_level: updated.difficulty_level,
           review_count: updated.review_count,
-          last_reviewed_at: updated.last_reviewed_at?.toISOString(),
-          next_review_date: updated.next_review_date.toISOString(),
+          last_reviewed_at: updated.last_reviewed_at 
+            ? (updated.last_reviewed_at instanceof Date 
+                ? updated.last_reviewed_at.toISOString() 
+                : new Date(updated.last_reviewed_at).toISOString())
+            : null,
+          next_review_date: updated.next_review_date instanceof Date
+            ? updated.next_review_date.toISOString()
+            : new Date(updated.next_review_date).toISOString(),
         })
         .eq('id', existing.id)
     } else {
@@ -122,7 +128,9 @@ export class ProgressTracker {
         content_id: newItem.content_id,
         content_type: newItem.content_type,
         difficulty_level: newItem.difficulty_level,
-        next_review_date: newItem.next_review_date.toISOString(),
+        next_review_date: newItem.next_review_date instanceof Date
+          ? newItem.next_review_date.toISOString()
+          : new Date(newItem.next_review_date).toISOString(),
         review_count: newItem.review_count,
       })
     }
@@ -184,6 +192,9 @@ export class ProgressTracker {
     return getRecommendedContent(path.level as any, performance)
   }
 }
+
+
+
 
 
 

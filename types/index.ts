@@ -62,7 +62,7 @@ export interface Worksheet {
 
 export interface WorksheetQuestion {
   id: string
-  type: 'fill_in_blank' | 'matching' | 'scenario' | 'short_answer' | 'applied_challenge'
+  type: 'fill_in_blank' | 'matching' | 'scenario' | 'short_answer' | 'applied_challenge' | 'multiple_choice' | 'true_false'
   question: string
   options?: string[]
   correct_answer: string | string[]
@@ -139,6 +139,9 @@ export interface AIProvider {
   model: string | null
   is_active: boolean
 }
+
+
+
 
 
 

@@ -1,6 +1,6 @@
 import type { AIProvider } from '@/lib/ai/providers/base'
 import { ContentGenerator } from './content-generator'
-import type { Database } from '@/types/database'
+import type { Database, Json } from '@/types/database'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 export async function generateMilestoneContent(
@@ -58,10 +58,10 @@ export async function generateMilestoneContent(
           real_world_use_cases: lesson.real_world_use_cases,
           analogies: lesson.analogies,
           visual_models: lesson.visual_models,
-          step_by_step_examples: lesson.step_by_step_examples,
+          step_by_step_examples: lesson.step_by_step_examples as Json,
           common_mistakes: lesson.common_mistakes,
           estimated_minutes: lesson.estimated_minutes,
-        })
+        } as Database['public']['Tables']['lessons']['Insert'])
         .select()
         .single()
 

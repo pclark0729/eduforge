@@ -4,13 +4,11 @@ import { generateLesson } from './lessons'
 import { generateWorksheet } from './worksheets'
 import { generateQuiz } from './quizzes'
 import { generateCapstone } from './capstones'
-import type {
-  LearningPathGenerationResult,
-  LessonGenerationResult,
-  WorksheetGenerationResult,
-  QuizGenerationResult,
-  CapstoneGenerationResult,
-} from './learning-path'
+import type { LearningPathGenerationResult } from './learning-path'
+import type { LessonGenerationResult } from './lessons'
+import type { WorksheetGenerationResult } from './worksheets'
+import type { QuizGenerationResult } from './quizzes'
+import type { CapstoneGenerationResult } from './capstones'
 
 export class ContentGenerator {
   constructor(private provider: AIProvider) {}
@@ -56,6 +54,9 @@ export class ContentGenerator {
     return generateCapstone(this.provider, topic, level, concepts)
   }
 }
+
+
+
 
 
 
