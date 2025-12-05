@@ -42,7 +42,7 @@ export default async function LessonPage({
       status: 'in_progress',
       completion_percentage: 0,
       last_accessed_at: new Date().toISOString(),
-    })
+    } as any)
   } else {
     await supabase
       .from('user_progress')
