@@ -77,18 +77,18 @@ export default async function LessonPage({
         </Link>
       </div>
 
-      <LessonViewer lesson={lesson} />
+      <LessonViewer lesson={lesson as any} />
 
       <div className="flex items-center justify-between gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
         <CompleteLessonButton
           pathId={params.pathId}
           lessonId={params.lessonId}
-          estimatedMinutes={lesson.estimated_minutes}
+          estimatedMinutes={(lesson as any).estimated_minutes}
         />
         <NextModuleButton
           pathId={params.pathId}
           currentLessonId={params.lessonId}
-          currentOrderIndex={lesson.order_index}
+          currentOrderIndex={(lesson as any).order_index}
         />
       </div>
     </div>
