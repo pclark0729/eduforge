@@ -23,30 +23,30 @@ export default async function CapstonePage({
     notFound()
   }
 
-  // Get pathId from either the direct field or the joined relation
+  // Cast to any to handle joined relations and property access
   const capstoneAny = capstone as any
   const pathId = capstoneAny.learning_path_id || capstoneAny.learning_paths?.id
 
   // Parse JSON fields if needed
-  if (capstone.requirements && typeof capstone.requirements === 'string') {
+  if (capstoneAny.requirements && typeof capstoneAny.requirements === 'string') {
     try {
-      capstone.requirements = JSON.parse(capstone.requirements)
+      capstoneAny.requirements = JSON.parse(capstoneAny.requirements)
     } catch (e) {
       // Ignore parse errors
     }
   }
 
-  if (capstone.evaluation_rubric && typeof capstone.evaluation_rubric === 'string') {
+  if (capstoneAny.evaluation_rubric && typeof capstoneAny.evaluation_rubric === 'string') {
     try {
-      capstone.evaluation_rubric = JSON.parse(capstone.evaluation_rubric)
+      capstoneAny.evaluation_rubric = JSON.parse(capstoneAny.evaluation_rubric)
     } catch (e) {
       // Ignore parse errors
     }
   }
 
-  if (capstone.extension_challenges && typeof capstone.extension_challenges === 'string') {
+  if (capstoneAny.extension_challenges && typeof capstoneAny.extension_challenges === 'string') {
     try {
-      capstone.extension_challenges = JSON.parse(capstone.extension_challenges)
+      capstoneAny.extension_challenges = JSON.parse(capstoneAny.extension_challenges)
     } catch (e) {
       // Ignore parse errors
     }
@@ -78,7 +78,7 @@ export default async function CapstonePage({
         </div>
       )}
 
-      <CapstoneViewer capstone={capstone} />
+      <CapstoneViewer capstone={capstoneAny} />
     </div>
   )
 }

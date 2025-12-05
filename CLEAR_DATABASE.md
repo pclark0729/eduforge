@@ -75,3 +75,4 @@ ALTER SEQUENCE IF EXISTS public.learning_paths_id_seq RESTART WITH 1;
 
 
 
+
