@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
 
     if (!customerId) {
       // Create Stripe customer
-      const customer = await stripe.customers.create({
+      const customer: Stripe.Customer = await stripe.customers.create({
         email: user.email || undefined,
         metadata: {
           userId: user.id,
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
           },
         ]
 
-    const session = await stripe.checkout.sessions.create({
+    const session: Stripe.Checkout.Session = await stripe.checkout.sessions.create({
       customer: customerId,
       payment_method_types: ['card'],
       line_items: lineItems,
@@ -122,6 +122,13 @@ export async function POST(request: NextRequest) {
         planId: planId,
       },
     })
+
+    if (!session.url) {
+      return NextResponse.json(
+        { error: 'Failed to create checkout session URL' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
