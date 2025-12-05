@@ -98,13 +98,20 @@ export async function POST(request: NextRequest) {
           .single()
 
         if (existingSub) {
+          // Extract properties with explicit type assertions to bypass TypeScript issues
+          const subscriptionAny = subscription as any
+          const periodStart = subscriptionAny.current_period_start as number
+          const periodEnd = subscriptionAny.current_period_end as number
+          const cancelAtPeriodEnd = subscriptionAny.cancel_at_period_end as boolean | null | undefined
+          const subscriptionStatus = subscription.status as string
+          
           await (supabase
             .from('user_subscriptions') as any)
             .update({
-              status: subscription.status === 'active' ? 'active' : 'canceled',
-              current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-              current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-              cancel_at_period_end: subscription.cancel_at_period_end || false,
+              status: subscriptionStatus === 'active' ? 'active' : 'canceled',
+              current_period_start: new Date(periodStart * 1000).toISOString(),
+              current_period_end: new Date(periodEnd * 1000).toISOString(),
+              cancel_at_period_end: cancelAtPeriodEnd || false,
             })
             .eq('stripe_customer_id', customerId)
         }
