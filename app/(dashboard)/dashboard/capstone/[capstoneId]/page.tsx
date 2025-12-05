@@ -23,7 +23,9 @@ export default async function CapstonePage({
     notFound()
   }
 
-  const pathId = (capstone.learning_paths as any)?.id
+  // Get pathId from either the direct field or the joined relation
+  const capstoneAny = capstone as any
+  const pathId = capstoneAny.learning_path_id || capstoneAny.learning_paths?.id
 
   // Parse JSON fields if needed
   if (capstone.requirements && typeof capstone.requirements === 'string') {
@@ -80,6 +82,7 @@ export default async function CapstonePage({
     </div>
   )
 }
+
 
 
 
