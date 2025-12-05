@@ -3,6 +3,7 @@ import { requireAuth } from '@/lib/auth/require-auth'
 import { createServerComponentClient } from '@/lib/supabase/server'
 import { SUBSCRIPTION_PLANS } from '@/lib/subscriptions/plans'
 import { stripe } from '@/lib/stripe/config'
+import Stripe from 'stripe'
 
 if (!stripe) {
   console.warn('Stripe is not configured - checkout will not work')
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe checkout session
     // Use pre-created Price ID if available, otherwise create dynamically
-    const lineItems = plan.stripePriceId
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = plan.stripePriceId
       ? [
           {
             price: plan.stripePriceId,
@@ -101,7 +102,7 @@ export async function POST(request: NextRequest) {
                 description: `${plan.coursesPerPeriod === null ? 'Unlimited' : plan.coursesPerPeriod} courses per ${plan.periodType}`,
               },
               recurring: {
-                interval: 'month',
+                interval: 'month' as Stripe.Price.Recurring.Interval,
               },
               unit_amount: Math.round(plan.priceMonthly * 100), // Convert to cents
             },

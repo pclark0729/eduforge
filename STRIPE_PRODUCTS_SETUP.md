@@ -128,3 +128,4 @@ const lineItems = plan.stripePriceId
 2. Copy the Price IDs
 3. Let me know if you want me to update the code to use Price IDs instead of dynamic creation
 
+

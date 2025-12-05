@@ -72,3 +72,4 @@ After running the migration:
 - The system prevents course creation when limits are reached
 - Upgrade prompts are shown when limits are hit
 
+
