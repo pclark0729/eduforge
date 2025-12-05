@@ -53,7 +53,7 @@ export default async function DashboardPage() {
           </p>
         </Link>
 
-        {learningPaths?.map((path) => (
+        {(learningPaths as any[])?.map((path: any) => (
           <Link
             key={path.id}
             href={`/dashboard/learn/${path.id}`}
