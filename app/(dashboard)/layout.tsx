@@ -25,45 +25,47 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <nav className="bg-white shadow-sm dark:bg-gray-800">
+    <div className="min-h-screen">
+      {/* Terminal Header */}
+      <nav className="terminal-border border-b-2">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold text-blue-600">
-                EduForge
+            <div className="flex items-center space-x-6">
+              <Link href="/dashboard" className="text-terminal-green font-bold text-lg">
+                <span className="text-terminal-prompt">$</span> EduForge
               </Link>
-              <div className="ml-10 flex space-x-4">
+              <div className="hidden md:flex space-x-1">
                 <Link
                   href="/dashboard"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="px-3 py-2 text-sm terminal-link border-none hover:text-terminal-green"
                 >
-                  Dashboard
+                  [dashboard]
                 </Link>
                 <Link
                   href="/dashboard/learn"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="px-3 py-2 text-sm terminal-link border-none hover:text-terminal-green"
                 >
-                  My Learning
+                  [learn]
                 </Link>
                 <Link
                   href="/dashboard/settings"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  className="px-3 py-2 text-sm terminal-link border-none hover:text-terminal-green"
                 >
-                  Settings
+                  [settings]
                 </Link>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-700 dark:text-gray-300">
-                {(profile as any)?.full_name || user.email}
+              <span className="text-sm text-terminal-text">
+                <span className="text-terminal-blue">@</span>
+                {(profile as any)?.full_name || user.email?.split('@')[0]}
               </span>
               <form action={handleSignOut}>
                 <button
                   type="submit"
-                  className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+                  className="terminal-button text-terminal-red border-terminal-red hover:bg-terminal-red hover:text-terminal-bg"
                 >
-                  Sign Out
+                  [exit]
                 </button>
               </form>
             </div>
