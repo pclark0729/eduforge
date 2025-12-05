@@ -52,6 +52,7 @@ export default function CheckoutPage() {
     if (planId) {
       handleCheckout()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planId])
 
   return (

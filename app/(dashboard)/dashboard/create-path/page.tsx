@@ -171,7 +171,7 @@ export default function CreatePathPage() {
             onChange={(e) => setTopic(e.target.value)}
             placeholder="e.g., Machine Learning, Photosynthesis, JavaScript"
             className="terminal-input w-full"
-            disabled={usage && !usage.canCreate}
+            disabled={!!(usage && !usage.canCreate)}
           />
           <p className="mt-1 text-sm text-terminal-text opacity-70">
             Be as specific or general as you like. We&apos;ll break it down for you.
@@ -187,7 +187,7 @@ export default function CreatePathPage() {
             value={level}
             onChange={(e) => setLevel(e.target.value)}
             className="terminal-input w-full"
-            disabled={usage && !usage.canCreate}
+            disabled={!!(usage && !usage.canCreate)}
           >
             <option value="beginner">Beginner - Just starting out</option>
             <option value="intermediate">Intermediate - Some experience</option>
@@ -207,7 +207,7 @@ export default function CreatePathPage() {
             placeholder="Tell us what you already know about this topic..."
             rows={4}
             className="terminal-input w-full"
-            disabled={usage && !usage.canCreate}
+            disabled={!!(usage && !usage.canCreate)}
           />
         </div>
 
@@ -225,7 +225,7 @@ export default function CreatePathPage() {
         <div>
           <button
             type="submit"
-            disabled={loading || !topic || (usage && !usage.canCreate)}
+            disabled={loading || !topic || !!(usage && !usage.canCreate)}
             className="terminal-button w-full disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? (
